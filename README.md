@@ -251,7 +251,7 @@
    !index.js
    ```
 
-2. although in official github readme, [ES Modules](https://github.com/google/clasp/blob/master/docs/esmodules.md)
+2. although in official github, [ES Modules](https://github.com/google/clasp/blob/master/docs/esmodules.md)
 
    ```txt
    # and our transpiled code
@@ -265,4 +265,3 @@
 [webpack、babel、esbuildをちゃんと理解したい。](https://zenn.dev/crsc1206/articles/0b0960fa306d71)
 [ESLintのバージョンをv6.8.0からv8.4.1に上げる](https://techblog.lclco.com/entry/2021/12/17/100022)
 [eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin)
-
