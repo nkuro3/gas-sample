@@ -23,13 +23,12 @@
 2. `clasp setting projectId {ProjectID}`
 3. 「OAuth同意画面」の作成（必須項目のみでよい）
 4. `clasp open` (Google Cloudのトップページを開く)
-5. Google Cloud > Setting > GCPプロジェクト番号の変更
-6. `clasp open --creds` （Google Cloudの認証ページを開く）
-7. OAuth 2 client IDを作る（デスクトップアプリ）
-8. jsonをダウンロードして、ローカルのGASプロジェクトのルートに配置。ファイル名をcreds.jsonにリネーム
-9. `clasp login --creds creds.json`（OAuthでのログイン）
-10. （OAuth同意画面を外部で作成した場合は、テストユーザーに登録が必要）
-11. appsscript.jsonに追加
+5. `clasp open --creds` （Google Cloudの認証ページを開く）
+6. OAuth 2 client IDを作る（デスクトップアプリ）
+7. jsonをダウンロードして、ローカルのGASプロジェクトのルートに配置。ファイル名をcreds.jsonにリネーム
+8. `clasp login --creds creds.json`（OAuthでのログイン）
+9. （OAuth同意画面を外部で作成した場合は、テストユーザーに登録が必要）
+10. appsscript.jsonに追加
 
     ```json
     "executionApi": {
@@ -37,6 +36,7 @@
     }
     ```
 
+11. Google Cloud > Setting > GCPプロジェクト番号の変更
 12. App Script API を有効化
 13. App Script > Setting > Google App Script API オンに変更
 14. `clasp push`
@@ -116,7 +116,7 @@
     }
     ```
 
-7. src/\* にテストファイルを用意
+7. src/* にテストファイルを用意
 8. webpack.config.js
 
     ```js
@@ -237,7 +237,7 @@
       └── ✕ unmet peer eslint@^8.0.0: found 9.1.1
    ```
 
-7. `pnpm add -D slint@8`
+7. `pnpm add -D eslint@8`
 8. `pnpm run deploy`
 
    ```bash
