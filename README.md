@@ -2,6 +2,10 @@
 
 [Google Cloud](https://console.cloud.google.com/home/dashboard?hl=ja&project=gas-project-421509)
 
+[App Script](https://script.google.com/home/projects/1imAYeDk5zurqXOrLI0dg-UIIlu6lkmUSQSw_sc9ERW5oA0Pc8CglIHyi/edit)
+
+[Looker Studio]()
+
 ## ローカル開発
 
 ### 手順（更新のみ）
@@ -265,3 +269,133 @@
 [webpack、babel、esbuildをちゃんと理解したい。](https://zenn.dev/crsc1206/articles/0b0960fa306d71)
 [ESLintのバージョンをv6.8.0からv8.4.1に上げる](https://techblog.lclco.com/entry/2021/12/17/100022)
 [eslint-webpack-plugin](https://github.com/webpack-contrib/eslint-webpack-plugin)
+
+## Looker Studio
+
+### 手順
+
+1. getAuthType()
+
+    ```ts
+    export const getAuthType = () => {
+      const AuthTypes = cc.AuthType;
+      return cc.newAuthTypeResponse().setAuthType(AuthTypes.NONE).build();
+    };
+    ```
+
+2. getConfig()
+
+    ```ts
+    export const getConfig = () => {
+      const config = cc.getConfig();
+      return config.build();
+    };
+    ```
+
+3. getSchema()
+
+    ```ts
+    export const getFields = () => {
+      const cc = DataStudioApp.createCommunityConnector();
+      const fields = cc.getFields();
+      const types = cc.FieldType;
+
+      fields.newDimension().setId('id').setName('ID').setType(types.NUMBER);
+
+      fields
+        .newDimension()
+        .setId('projectId')
+        .setName('プロジェクト ID')
+        .setType(types.NUMBER);
+
+      return fields;
+    };
+
+    export const getSchema = () => {
+      const fields = getFields().build();
+      return { schema: fields };
+    };
+    ```
+
+4. getData()
+
+    ```ts
+    export const getData = (
+      request: GoogleAppsScript.Data_Studio.Request<void>,
+    ) => {
+      const requestedFieldIds = request.fields.map(
+        (field: { name: string }) => field.name || '',
+      );
+      const requestedFields = getFields().forIds(requestedFieldIds);
+
+      const response = [
+        { id: 1, projectId: '01' },
+        { id: 2, projectId: '02' },
+      ];
+      const rows = responseToRows(requestedFields, response);
+
+      return {
+        schema: requestedFields.build(),
+        rows: rows,
+      };
+    };
+
+    const responseToRows = (
+      requestedFields: GoogleAppsScript.Data_Studio.Fields,
+      response: Array<{ id: Number; projectId: string }>,
+    ) => {
+      return response.map((data: { id: Number; projectId: string }) => {
+        const row: Array<string | Number> = [];
+        requestedFields.asArray().forEach(function (field) {
+          switch (field.getId()) {
+            case 'id':
+              return row.push(data.id);
+            case 'projectId':
+              return row.push(data.projectId);
+            default:
+              return row.push('');
+          }
+        });
+        return { values: row };
+      });
+    };
+    ```
+
+5. appsscript.json
+
+    ```json
+    {
+      // ...
+      "dataStudio": {
+        // ...
+      }
+    }
+    ```
+
+    [Example manifest for a Community Connector](https://developers.google.com/looker-studio/connector/manifest#example_manifest_for_a_community_connector)
+
+6. `pnpm run deploy`
+7. App Script > deploy > test > Copy `Deploy ID`
+8. Looker Studio > 独自のコネクト > `Deploy ID` をペースト > 承認
+9. （appsscriptやコードを修正してデプロイしなおすときは、デプロイをして新しいデプロイIDを取得する。）
+10. Looker Studio でデータが取得できる。
+
+### Errors
+
+#### dataStudio.addonUrl
+
+```bash
+code: 400,
+errors: [
+  {
+    message: '"appsscript.json" has errors: Missing required field: dataStudio.addonUrl',
+    domain: 'global',
+    reason: 'badRequest'
+  }
+]
+```
+
+### 参考
+
+[Looker Studio(旧データポータル)のコネクタを自作し、REST APIからデータを取得する](https://weseek.co.jp/tech/3521/)
+[Manifest Reference](https://developers.google.com/looker-studio/connector/manifest)

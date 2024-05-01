@@ -5,5 +5,17 @@
   "runtimeVersion": "V8",
   "executionApi": {
     "access": "ANYONE"
+  },
+  "dataStudio": {
+    "name": "nkuro's data",
+    "logoUrl": "https://www.svgrepo.com/show/354113/nextjs-icon.svg",
+    "company": "nkuro",
+    "companyUrl": "https://example.com/",
+    "addonUrl": "https://example.com/",
+    "supportUrl": "https://example.com/",
+    "description": "nkuro's sample project.",
+    "sources": [
+      "nkuro"
+    ]
   }
 }
